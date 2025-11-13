@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
 import json
+from scipy.optimize import curve_fit
 
 # ------------------------- Cargar datos históricos -------------------------
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -191,3 +192,40 @@ print(f"Tabla de proyección guardada en:\n  - {csv_path}\n  - {xlsx_path}")
 print("\nValores proyectados de W (2025–2029):")
 for year, w in zip(t_years_full[n_hist:], W_sim[n_hist:]):
     print(f"  {year}: {w:.2f}")
+
+# ------------------------- Función de ajuste exponencial -------------------------
+
+
+def exp_func(x, a, b, c):
+    return a * np.exp(b * x) + c
+
+
+# Ajustar la curva a los datos de Infraestructura_Ecologica
+popt, pcov = curve_fit(exp_func, t_years_data, E_data)
+
+# Generar valores ajustados
+E_fit = exp_func(t_years_full, *popt)
+
+# Graficar los datos originales y el ajuste
+plt.figure(figsize=(10, 5))
+plt.plot(t_years_data, E_data, 'o',
+         label='Datos de Infraestructura Ecológica', color='blue')
+plt.plot(t_years_full, E_fit, '-',
+         label='Ajuste exponencial', color='red')
+plt.xlabel('Año')
+plt.ylabel('Infraestructura Ecológica')
+plt.title('Ajuste de Curva Exponencial a Infraestructura Ecológica')
+plt.legend()
+plt.grid()
+plt.show()
+
+# Derivada de la función ajustada
+
+
+def exp_derivative(x, a, b):
+    return a * b * np.exp(b * x)
+
+
+# Calcular el jacobiano
+jacobian = exp_derivative(t_years_full, *popt[:2])
+print("Jacobian calculado:", jacobian)
