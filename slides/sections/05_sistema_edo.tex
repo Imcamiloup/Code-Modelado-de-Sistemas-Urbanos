@@ -1,0 +1,20 @@
+\begin{frame}{Sistema Dinámico Propuesto Inicialmente}
+\small
+
+\[
+\begin{aligned}
+    \dot P &= r\,P \left(1 - \frac{P}{K(U,E)}\right) + \gamma_F\,F(t) \\
+    &\quad \text{(Población: logístico con capacidad variable + presión social)}\\[4pt]
+    \dot W &= \alpha_W\,P + \beta_W\,U + \theta_W\,E + \gamma_W\,W - \delta_W\,F \\
+    &\quad \text{(Bienestar: escala, servicios urbanos, ecología, persistencia, impacto desigualdad)}\\[4pt]
+    \dot F &= -\alpha_F\,F + \beta_F\,W \\
+    &\quad \text{(Desigualdad: relajación estructural + respuesta al bienestar)}\\[4pt]
+    \dot U &= \alpha_P\,P + \beta_V\,V - \gamma_E\,E + \bar{\beta} \\
+    &\quad \text{(Huella Urbana: expansión demográfica, velocidad crecimiento, mitigación ecológica)}\\[4pt]
+    \dot E &= -\delta_U\,U \\
+    &\quad \text{(Infraestructura Ecológica: erosión por presión urbana)}
+\end{aligned}
+\]
+
+\textbf{Complejidad:} 11+ parámetros, $K(U,E)$ no lineal, alta interdependencia (dificulta identificación)
+\end{frame}

@@ -1,0 +1,62 @@
+%!TEX root = ../presentation.tex
+% ...existing code...
+\documentclass[aspectratio=1610]{beamer}
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\graphicspath{{sections/}{../00Figuras/}{../../00Figuras/}{./}}
+
+\title{Modelo Integrado de Sistemas Urbanos \\ (Aplicación: Bogotá)}
+\author{Luis Camilo Gómez Rodríguez}
+\date{25 de noviembre de 2025}
+
+\begin{document}
+
+% Metadatos / portada automÃ¡tica (se puede comentar si la portada estÃ¡ en 01_portada.tex)
+\begin{frame}[plain,noframenumbering]
+  \titlepage
+\end{frame}
+
+% Incluir las secciones en el orden previsto (archivos en slides/sections/)
+\input{sections/01_contexto0.tex}
+\input{sections/01_contexto.tex}
+\input{sections/01_contexto2.tex}
+\input{sections/02_objetivos.tex}
+\input{sections/03_introduccion.tex}
+\input{sections/04_variables.tex}
+\input{sections/05_sistema_edo.tex}
+\input{sections/06_poblacion.tex}
+\input{sections/07_territorio.tex}
+\input{sections/11_metodos_ajuste.tex}
+\input{sections/14_analisis_fase.tex}
+\input{sections/15_proyecciones.tex}
+\input{sections/20_referencias.tex}
+\input{sections/09_estructura_ecologica.tex}
+\input{sections/08_bienestar.tex}
+
+
+
+\input{sections/12_implementacion.tex}
+\input{sections/24_Grafico_validacion.tex}
+\input{sections/10_datos.tex}
+\input{sections/25_Grafico_proyeccion.tex}
+\input{sections/13_resultados.tex}
+
+
+
+\input{sections/17_limitaciones.tex}
+\input{sections/19_recomendaciones.tex}
+\input{sections/16_discusion.tex}
+
+
+\input{sections/18_conclusiones.tex}
+\input{sections/21_Conclusiones_II.tex}
+\input{sections/22_Conclusiones_finales.tex}
+\input{sections/23_Conclusiones_finales_II.tex}
+
+
+\end{document}

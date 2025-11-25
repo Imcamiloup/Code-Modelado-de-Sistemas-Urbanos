@@ -1,0 +1,168 @@
+\documentclass[final]{beamer}
+\usepackage[size=custom,width=80,height=120,scale=1.0]{beamerposter}
+\usetheme{confposter}
+\usecolortheme{seahorse}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\graphicspath{{img/}}
+
+\title{Modelo Integrado de Sistemas Urbanos Acoplados\\
+Caso de Estudio: Bogotá D.C.}
+\author{Luis Camilo Gómez Rodríguez}
+\institute{Universidad Nacional de Colombia | Ingeniería de Sistemas | 2025}
+
+\begin{document}
+\begin{frame}[t]
+
+% EL HEADLINE SE GENERA AUTOMÁTICAMENTE POR EL .sty
+
+\begin{columns}[t]
+
+% -------- COLUMNA IZQUIERDA --------
+\begin{column}{0.47\paperwidth}
+
+\begin{block}{Contexto y Objetivo}
+\large
+Sistemas urbanos con retroalimentaciones entre \textbf{Población (P)}, \textbf{Desigualdad (F)}, \textbf{Bienestar (W)}, \textbf{Huella Urbana (U)} e \textbf{Infraestructura Ecológica (E)}. 
+
+\vskip0.5cm
+\textbf{Objetivo:} Calibrar y validar un sistema acoplado P–F–W para explicar y proyectar la dinámica urbana de Bogotá.
+\end{block}
+
+\begin{block}{Sistema de Ecuaciones Diferenciales}
+\large
+Versión calibrada con U, E exógenas suavizadas (polinomios grado 2 y 3):
+\[
+\begin{aligned}
+\dot P &= rP\left(1-\frac{P}{K}\right)+\gamma_F F \\[0.4cm]
+\dot F &= -\alpha_F F+\beta_F W \\[0.4cm]
+\dot W &= \alpha_W P+\beta_W(U+E)+\gamma_W W-\delta_W F + c_0
+\end{aligned}
+\]
+\end{block}
+
+\begin{block}{Metodología}
+\large
+\begin{itemize}
+\setlength\itemsep{0.4cm}
+\item \textbf{Datos:} Series anuales 2012–2024 (DANE, SDP Bogotá)
+\item \textbf{Preproceso:} Normalización z-score, suavizado polinomial
+\item \textbf{Optimización:} Híbrida Differential Evolution + L-BFGS-B
+\item \textbf{Validación:} RMSE, MAE, R² por variable
+\end{itemize}
+\end{block}
+
+\begin{block}{Parámetros Estimados (escala normalizada)}
+\large
+\centering
+\begin{tabular}{l c l}
+\toprule
+\textbf{Parámetro} & \textbf{Valor} & \textbf{Interpretación} \\
+\midrule
+$r$ & 0.500 & Tasa máx. crecimiento P \\
+$K$ & 1.557 & Capacidad de carga \\
+$\gamma_F$ & $-1.686$ & F reduce P \\
+$\alpha_F$ & 0.225 & Relajación de F \\
+$\beta_F$ & 0.010 & W → F (débil) \\
+$\alpha_W$ & $-0.010$ & P → W (negativo) \\
+$\beta_W$ & $-0.080$ & U+E en W \\
+$\gamma_W$ & $-1.000$ & Amortiguamiento \\
+$\delta_W$ & 1.000 & F penaliza W \\
+\bottomrule
+\end{tabular}
+\end{block}
+
+\begin{block}{Validación: Ajuste Histórico}
+\large
+\textbf{Coeficientes R²:} P = 0.96 (excelente) | F ≈ 0.17 | W ≈ 0.27
+\vskip0.5cm
+\centering
+\includegraphics[width=0.95\linewidth]{validacion_sistema_logistico.png}
+\vskip0.3cm
+\raggedright
+Modelo captura bien la tendencia poblacional; F y W muestran alta volatilidad.
+\end{block}
+
+\end{column}
+
+% -------- COLUMNA DERECHA --------
+\begin{column}{0.47\paperwidth}
+
+\begin{block}{Análisis de Estabilidad}
+\large
+\textbf{Jacobiano evaluado en puntos fijos:}
+\[
+J = \begin{bmatrix}
+r(1-2P/K) & \gamma_F & 0 \\
+0 & -\alpha_F & \beta_F \\
+\alpha_W & -\delta_W & \gamma_W
+\end{bmatrix}
+\]
+
+\vskip0.5cm
+\textbf{Resultados:}
+\begin{itemize}
+\item \textbf{PF1} ($-0.01, -0.003, -0.07$): Silla (inestable)
+\item \textcolor{red}{\textbf{PF2} ($1.57, -0.004, -0.09$): Atractor estable}
+\end{itemize}
+
+\vskip0.3cm
+Eigenvalores PF2: $\lambda_{1,2,3} < 0$ → convergencia asintótica garantizada
+\end{block}
+
+\begin{block}{Diagramas de Fase (2D)}
+\centering
+\begin{minipage}{0.48\linewidth}
+\centering
+\includegraphics[width=\linewidth]{fase_PW.png}\\[0.2cm]
+{\large \textbf{P–W} (F=0)}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+\centering
+\includegraphics[width=\linewidth]{fase_PF.png}\\[0.2cm]
+{\large \textbf{P–F} (W=0)}
+\end{minipage}
+
+\vskip0.8cm
+\includegraphics[width=0.6\linewidth]{fase_FW.png}\\[0.2cm]
+{\large \textbf{F–W} (P=K/2)}
+
+\vskip0.5cm
+\raggedright
+\large
+Flujos convergen hacia PF2 (rojo). Sistema globalmente estable sin ciclos límite.
+\end{block}
+
+\begin{block}{Proyección a 5 Años}
+\large
+\textbf{Escenario:} U, E constantes; condición inicial = último año (2024)
+\vskip0.5cm
+\centering
+\includegraphics[width=0.95\linewidth]{proyeccion_5anios.png}
+\vskip0.3cm
+\raggedright
+Población converge a saturación (~8M hab.); desigualdad se relaja; bienestar estabiliza bajo.
+\end{block}
+
+\begin{block}{Conclusiones}
+\large
+\begin{itemize}
+\setlength\itemsep{0.4cm}
+\item Sistema presenta \textbf{atractor único estable} → dinámica predecible
+\item Población tiende a K → necesidad de expandir capacidad de carga
+\item F penaliza fuertemente W ($\delta_W=1$) → políticas redistributivas urgentes
+\item \textbf{Palancas:} aumentar K (infraestructura), fortalecer $\beta_F$ (W→F), reducir $\delta_W$ (F→W)
+\end{itemize}
+\end{block}
+
+\end{column}
+\end{columns}
+
+\end{frame}
+\end{document}

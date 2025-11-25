@@ -1,0 +1,33 @@
+% Diapositiva 3: Resultados Puntos Fijos
+\begin{frame}{Resultados: Puntos Fijos y Eigenvalores}
+\small
+\textbf{Puntos fijos identificados} (escala normalizada z-score):
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcccl}
+\toprule
+\textbf{PF} & \textbf{P} & \textbf{F} & \textbf{W} & \textbf{Estabilidad} \\
+\midrule
+PF1 & $-0.0100$ & $-0.0030$ & $-0.0700$ & Silla (inestable) \\
+PF2 & $1.5700$ & $-0.0040$ & $-0.0900$ & \textcolor{red}{Estable (atractor)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Eigenvalores de PF2 (atractor estable):}
+\[
+\lambda_1 = -1.0000, \quad \lambda_2 = -0.9992, \quad \lambda_3 = -0.2249
+\]
+\vspace{-6pt}
+\begin{itemize}
+  \item Todos negativos $\Rightarrow$ \textbf{convergencia asintótica garantizada} (sistema estable globalmente)
+  \item Sin parte imaginaria $\Rightarrow$ \textbf{sin oscilaciones} (relajación monótona)
+  \item $|\lambda_3| < |\lambda_1,\lambda_2|$ $\Rightarrow$ eje lento en dirección $F$ (desigualdad evoluciona más lento)
+\end{itemize}
+
+\textbf{Eigenvalores de PF1 (silla):}
+\[
+\lambda_1 = 0.5074 > 0 \quad \text{(dirección inestable)}, \quad \lambda_{2,3} < 0
+\]
+\end{frame}

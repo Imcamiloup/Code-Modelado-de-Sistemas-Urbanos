@@ -1,0 +1,17 @@
+% Diapositiva 5: Implementación Computacional
+\begin{frame}{Implementación: \texttt{estimacion\_parametros\_sistema.py}}
+\small
+\textbf{Flujo de ejecución} (describir pipeline modular):
+\begin{enumerate}
+  \item \texttt{cargar\_normalizado()}: Lee Excel, normaliza, retorna dict (datos listos para uso)
+  \item \texttt{suavizar(x, deg)}: Ajuste polinómico de U, E (filtrado previo)
+  \item \texttt{edo(t, y, pars, ...)}: Define sistema $\dot P,\dot F,\dot W$ (núcleo dinámico)
+  \item \texttt{perdida(pars, ...)}: Integra EDOs, calcula MSE ponderado (función objetivo)
+  \item \texttt{estimar()}: Ejecuta optimización, guarda JSON (orquestador principal)
+\end{enumerate}
+
+\textbf{Salida:} \texttt{parametros\_sistema\_logistico.json} (10 parámetros + estadísticos normalización)\\[6pt]
+
+\textbf{Tiempo de cómputo:} $\sim$3-5 min (mencionar trade-off precisión/velocidad)\\
+\textbf{Librerías clave:} \texttt{scipy.integrate.solve\_ivp}, \texttt{scipy.optimize.differential\_evolution}
+\end{frame}

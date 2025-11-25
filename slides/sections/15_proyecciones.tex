@@ -1,0 +1,16 @@
+\begin{frame}{Preparación de Datos y Normalización}
+\textbf{Paso 1: Normalización z-score}
+\[
+X_z = \frac{X - \mu_X}{\sigma_X + 10^{-9}}, \quad X \in \{P,U,E,F,W\}
+\]
+Motivo: homogeneizar escalas (población en millones, Gini en [0,1])\\[8pt]
+
+\textbf{Paso 2: Suavizado exógeno}
+\[
+\widehat{U}(s)=\sum_{k=0}^{2} u_k s^k, \quad \widehat{E}(s)=\sum_{k=0}^{3} e_k s^k, \quad s\in[0,1]
+\]
+Grados bajos → evitar sobreajuste \\[8pt]
+
+\textbf{Paso 3: Condiciones iniciales:} $(P_z(0), F_z(0), W_z(0))$ (primer año normalizado)\\
+\textbf{Integración:} \texttt{solve\_ivp} con rtol=$10^{-6}$, atol=$10^{-8}$ (alta precisión)
+\end{frame}

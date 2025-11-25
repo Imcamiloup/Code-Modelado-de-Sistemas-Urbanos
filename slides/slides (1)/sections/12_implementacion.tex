@@ -1,0 +1,26 @@
+% Diapositiva 7: Resultados de Validación
+\begin{frame}{Resultados de Validación del Ajuste}
+\textbf{Métricas obtenidas} (\texttt{metricas\_validacion.json}):
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Variable} & \textbf{RMSE} & \textbf{MAE} & \textbf{$R^2$} \\
+\midrule
+Población (P)     & 162,498       & 128,819      & 0.9638 \\
+Desigualdad (F)   & 0.0218        & 0.0178       & 0.1739 \\
+Bienestar (W)     & 4.84          & 4.02         & 0.2679 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación:}
+\begin{itemize}
+  \item Población: excelente ajuste (R²>0.96, término logístico funciona)
+  \item Desigualdad: captura tendencia pero baja varianza
+  \item Bienestar: ajuste moderado 
+\end{itemize}
+
+\textbf{Conclusión parcial:} Modelo parsimonioso captura dinámica poblacional; F y W requieren refinamiento 
+\end{frame}

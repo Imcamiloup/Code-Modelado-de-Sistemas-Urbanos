@@ -1,0 +1,14 @@
+\begin{frame}{Sistema Dinámico Acoplado}
+\textbf{Modelo propuesto} :
+\[
+\begin{aligned}
+\frac{dP}{dt} &= r\,P\Bigl(1-\frac{P}{K}\Bigr)+\gamma_F F \quad \text{(crecimiento logístico + efecto desigualdad)}\\[6pt]
+\frac{dF}{dt} &= -\alpha_F F + \beta_F W \quad \text{(relajación estructural + respuesta al bienestar)}\\[6pt]
+\frac{dW}{dt} &= \alpha_W P + \beta_W(U+E) + \gamma_W W - \delta_W F + c_0 \quad \text{(acumulación múltiple)}
+\end{aligned}
+\]
+
+\textbf{Variables endógenas:} P, F, W (estas evolucionan dinámicamente)\\
+\textbf{Entradas exógenas:} U, E suavizadas (polinomios grado 2 y 3, evitan ruido)\\
+\textbf{Parámetros:} $\theta=(r,\gamma_F,\alpha_F,\beta_F,\alpha_W,\beta_W,\gamma_W,\delta_W,c_0,K)$ (10 parámetros libres)
+\end{frame}

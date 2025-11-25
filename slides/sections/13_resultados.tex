@@ -1,0 +1,28 @@
+% Diapositiva 2: Fundamentos Matemáticos
+\begin{frame}{Fundamentos Matemáticos: Jacobiano y Estabilidad}
+\small
+\textbf{Sistema en equilibrio:} $\dot{\mathbf{x}} = \mathbf{f}(\mathbf{x}^*) = \mathbf{0}$, donde $\mathbf{x}=(P,F,W)$
+
+\vspace{6pt}
+\textbf{Matriz Jacobiana} (linealización local):
+\[
+J = \begin{bmatrix}
+\frac{\partial \dot P}{\partial P} & \frac{\partial \dot P}{\partial F} & \frac{\partial \dot P}{\partial W} \\[6pt]
+\frac{\partial \dot F}{\partial P} & \frac{\partial \dot F}{\partial F} & \frac{\partial \dot F}{\partial W} \\[6pt]
+\frac{\partial \dot W}{\partial P} & \frac{\partial \dot W}{\partial F} & \frac{\partial \dot W}{\partial W}
+\end{bmatrix}
+=
+\begin{bmatrix}
+r(1-2P/K) & \gamma_F & 0 \\
+0 & -\alpha_F & \beta_F \\
+\alpha_W & -\delta_W & \gamma_W
+\end{bmatrix}
+\]
+
+\textbf{Clasificación de estabilidad} (según eigenvalores $\lambda_i$ de $J$):
+\begin{itemize}
+  \item $\mathrm{Re}(\lambda_i) < 0\ \forall i$ $\Rightarrow$ \textcolor{red}{\textbf{Estable (atractor)}} (trayectorias convergen)
+  \item $\mathrm{Re}(\lambda_i) > 0$ para algún $i$ $\Rightarrow$ \textcolor{orange}{\textbf{Inestable (repulsor/silla)}} (trayectorias divergen)
+  \item $\mathrm{Im}(\lambda_i) \neq 0$ $\Rightarrow$ Oscilaciones (espirales, no presentes en este sistema)
+\end{itemize}
+\end{frame}

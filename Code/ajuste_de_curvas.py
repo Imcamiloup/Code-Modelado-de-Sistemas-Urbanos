@@ -17,19 +17,19 @@ variables = {
     'Bienestar': data['Bienestar'].values  # Bienestar Urbano
 }
 
-# Paso 3: Ajuste polinómico de grado 10 para Estructura Ecológica, grado 4 para Bienestar Urbano y Desigualdad,
+# Paso 3: Ajuste polinómico de grado 5 para Estructura Ecológica, grado 4 para Bienestar Urbano y Desigualdad,
 # y grado 3 para Población y Huella Urbana
 params_cubic = {}
 params_quartic = {}
-params_deci = {}
+params_quintic = {}
 
-# Ajuste de grado 10 para Estructura Ecológica
+# Ajuste de grado 5 para Estructura Ecológica
 # Ajuste de grado 4 para Bienestar Urbano y Desigualdad
 # Ajuste de grado 3 para Población y Huella Urbana
 for var_name, var_data in variables.items():
     if var_name == 'Estructura_Ecologica':
-        params_deci[var_name] = np.polyfit(
-            data['Año'].values, var_data, 10)  # Ajuste de grado 10
+        params_quintic[var_name] = np.polyfit(
+            data['Año'].values, var_data, 5)  # Ajuste de grado 5
     elif var_name == 'Bienestar' or var_name == 'Desigualdad':
         params_quartic[var_name] = np.polyfit(
             data['Año'].values, var_data, 4)  # Ajuste de grado 4
@@ -43,8 +43,8 @@ for i, (var_name, var_data) in enumerate(variables.items(), 1):
     plt.plot(data['Año'], var_data, 'bo', label=f'Datos de {var_name}')
 
     if var_name == 'Estructura_Ecologica':
-        # Evaluar el ajuste polinómico de grado 10
-        poly_func = np.poly1d(params_deci[var_name])
+        # Evaluar el ajuste polinómico de grado 5
+        poly_func = np.poly1d(params_quintic[var_name])
     elif var_name == 'Bienestar' or var_name == 'Desigualdad':
         # Evaluar el ajuste polinómico de grado 4
         poly_func = np.poly1d(params_quartic[var_name])
@@ -57,7 +57,7 @@ for i, (var_name, var_data) in enumerate(variables.items(), 1):
     plt.xlabel('Año')
     plt.ylabel(var_name)
     plt.title(
-        f'Ajuste Polinómico de {var_name} ({10 if var_name == "Estructura_Ecologica" else 4 if var_name == "Bienestar" or var_name == "Desigualdad" else 3}° Grado)')
+        f'Ajuste Polinómico de {var_name} ({5 if var_name == "Estructura_Ecologica" else 4 if var_name == "Bienestar" or var_name == "Desigualdad" else 3}° Grado)')
     plt.legend()
     plt.grid(True)
 
@@ -76,7 +76,7 @@ def print_equation(params, degree):
 
 print("Ecuaciones resultantes:")
 print(
-    f"Estructura Ecológica: E(x) = {print_equation(params_deci['Estructura_Ecologica'], 10)}")
+    f"Estructura Ecológica: E(x) = {print_equation(params_quintic['Estructura_Ecologica'], 5)}")
 print(
     f"Bienestar Urbano: W(x) = {print_equation(params_quartic['Bienestar'], 4)}")
 print(

@@ -1,0 +1,161 @@
+% Diapositiva 1: Introducción y Motivación
+\begin{frame}{Modelo Dinámico de Bienestar Urbano}
+\textbf{Contexto} (mencionar sistema urbano complejo con retroalimentaciones)\\[8pt]
+
+\textbf{Problema inicial:}
+\begin{itemize}
+  \item Ajuste univariado de Bienestar ($W$) (señalar limitación: solo 1 ecuación)
+  \item Variables P, U, E, F tratadas como exógenas (no capturan interdependencias)
+  \item Puntos fijos triviales (0,0) en análisis de fase (no realistas)
+  \item Proyecciones con relleno constante (sin fundamento dinámico)
+\end{itemize}
+
+\textbf{Objetivo:} Desarrollar sistema acoplado que capture interacciones P↔F↔W (enfatizar acoplamiento)
+\end{frame}
+
+% Diapositiva 2: Sistema de Ecuaciones
+\begin{frame}{Sistema Dinámico Acoplado}
+\textbf{Modelo propuesto} (explicar cada ecuación físicamente):
+\[
+\begin{aligned}
+\frac{dP}{dt} &= r\,P\Bigl(1-\frac{P}{K}\Bigr)+\gamma_F F \quad \text{(crecimiento logístico + efecto desigualdad)}\\[6pt]
+\frac{dF}{dt} &= -\alpha_F F + \beta_F W \quad \text{(relajación estructural + respuesta al bienestar)}\\[6pt]
+\frac{dW}{dt} &= \alpha_W P + \beta_W(U+E) + \gamma_W W - \delta_W F + c_0 \quad \text{(acumulación múltiple)}
+\end{aligned}
+\]
+
+\textbf{Variables endógenas:} P, F, W (estas evolucionan dinámicamente)\\
+\textbf{Entradas exógenas:} U, E suavizadas (polinomios grado 2 y 3, evitan ruido)\\
+\textbf{Parámetros:} $\theta=(r,\gamma_F,\alpha_F,\beta_F,\alpha_W,\beta_W,\gamma_W,\delta_W,c_0,K)$ (10 parámetros libres)
+\end{frame}
+
+% Diapositiva 3: Preparación de Datos
+\begin{frame}{Preparación de Datos y Normalización}
+\textbf{Paso 1: Normalización z-score} (explicar estabilidad numérica):
+\[
+X_z = \frac{X - \mu_X}{\sigma_X + 10^{-9}}, \quad X \in \{P,U,E,F,W\}
+\]
+Motivo: homogeneizar escalas (población en millones, Gini en [0,1])\\[8pt]
+
+\textbf{Paso 2: Suavizado exógeno} (mencionar reducir oscilaciones espurias):
+\[
+\widehat{U}(s)=\sum_{k=0}^{2} u_k s^k, \quad \widehat{E}(s)=\sum_{k=0}^{3} e_k s^k, \quad s\in[0,1]
+\]
+Grados bajos → evitar sobreajuste (no usar polinomios grado 10)\\[8pt]
+
+\textbf{Paso 3: Condiciones iniciales:} $(P_z(0), F_z(0), W_z(0))$ (primer año normalizado)\\
+\textbf{Integración:} \texttt{solve\_ivp} con rtol=$10^{-6}$, atol=$10^{-8}$ (alta precisión)
+\end{frame}
+
+% Diapositiva 4: Función de Pérdida y Optimización
+\begin{frame}{Función de Pérdida y Estrategia de Optimización}
+\textbf{Pérdida ponderada} (justificar pesos por varianza):
+\[
+\mathcal{L}(\theta) = w_P\,\mathrm{MSE}(P) + 2\,w_F\,\mathrm{MSE}(F) + w_W\,\mathrm{MSE}(W), \quad w_X = \frac{1}{\mathrm{Var}(X_z)}
+\]
+Factor 2 en F: mayor volatilidad (resaltar dificultad de capturar desigualdad)\\[8pt]
+
+\textbf{Optimización híbrida:}
+\begin{enumerate}
+  \item \textbf{Global:} Differential Evolution (mencionar exploración robusta, evita mínimos locales)
+    \begin{itemize}
+      \item Población: 25, Iteraciones: 150, Semilla: 42 (reproducibilidad)
+    \end{itemize}
+  \item \textbf{Local:} L-BFGS-B desde mejor global (convergencia fina con gradientes)
+\end{enumerate}
+
+\textbf{Cotas físicas} (enfatizar restricciones de signo y magnitud):
+\[
+r\in[-0.5,0.5],\ \gamma_W\in[-1,0],\ K\in[0.3,5],\ \ldots
+\]
+\end{frame}
+
+% Diapositiva 5: Implementación Computacional
+\begin{frame}{Implementación: \texttt{estimacion\_parametros\_sistema.py}}
+\small
+\textbf{Flujo de ejecución} (describir pipeline modular):
+\begin{enumerate}
+  \item \texttt{cargar\_normalizado()}: Lee Excel, normaliza, retorna dict (datos listos para uso)
+  \item \texttt{suavizar(x, deg)}: Ajuste polinómico de U, E (filtrado previo)
+  \item \texttt{edo(t, y, pars, ...)}: Define sistema $\dot P,\dot F,\dot W$ (núcleo dinámico)
+  \item \texttt{perdida(pars, ...)}: Integra EDOs, calcula MSE ponderado (función objetivo)
+  \item \texttt{estimar()}: Ejecuta optimización, guarda JSON (orquestador principal)
+\end{enumerate}
+
+\textbf{Salida:} \texttt{parametros\_sistema\_logistico.json} (10 parámetros + estadísticos normalización)\\[6pt]
+
+\textbf{Tiempo de cómputo:} $\sim$3-5 min (mencionar trade-off precisión/velocidad)\\
+\textbf{Librerías clave:} \texttt{scipy.integrate.solve\_ivp}, \texttt{scipy.optimize.differential\_evolution}
+\end{frame}
+
+% Diapositiva 6: Validación y Análisis de Fase
+\begin{frame}{Validación y Análisis Dinámico}
+\textbf{Script 1: \texttt{validacion\_sistema\_logistico.py}} (explicar comparación ajuste):
+\begin{itemize}
+  \item Simula con $\theta^\star$ sobre años históricos (reproducir trayectorias)
+  \item Desnormaliza y calcula RMSE, MAE, $R^2$ por variable (métricas estándar)
+  \item Genera gráfico comparativo Observado vs Simulado (inspección visual)
+\end{itemize}
+
+\textbf{Script 2: \texttt{analisis\_fase\_sistema\_logistico.py}} (mencionar estabilidad local):
+\begin{itemize}
+  \item Diagramas de fase P-W con streamplot (visualizar atractores/repulsores)
+  \item Campos vectoriales muestran trayectorias cualitativas (sin integrar)
+  \item Base para análisis de puntos fijos y estabilidad (Jacobiano pendiente)
+\end{itemize}
+
+\textbf{Script 3: \texttt{proyeccion\_sistema\_logistico.py}} (explicar escenarios futuros):
+\begin{itemize}
+  \item Proyección 5 años con U, E constantes (escenario conservador)
+  \item Condición inicial: último valor histórico normalizado (continuidad)
+\end{itemize}
+\end{frame}
+
+% Diapositiva 7: Resultados de Validación
+\begin{frame}{Resultados de Validación del Ajuste}
+\textbf{Métricas obtenidas} (\texttt{metricas\_validacion.json}):
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Variable} & \textbf{RMSE} & \textbf{MAE} & \textbf{$R^2$} \\
+\midrule
+Población (P)     & 162,498       & 128,819      & 0.9638 \\
+Desigualdad (F)   & 0.0218        & 0.0178       & 0.1739 \\
+Bienestar (W)     & 4.84          & 4.02         & 0.2679 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación:}
+\begin{itemize}
+  \item Población: excelente ajuste (mencionar R²>0.96, término logístico funciona)
+  \item Desigualdad: captura tendencia pero baja varianza explicada (señalar alta volatilidad intrínseca de Gini)
+  \item Bienestar: ajuste moderado (indicar necesidad de términos no lineales o retardos)
+\end{itemize}
+
+\textbf{Conclusión parcial:} Modelo parsimonioso captura dinámica poblacional; F y W requieren refinamiento (proponer extensiones)
+\end{frame}
+
+% Diapositiva 8: Proyección y Conclusiones Finales
+\begin{frame}{Proyección 5 Años y Conclusiones}
+\textbf{Escenario proyectado} (\texttt{proyeccion\_5anios.json}, U y E constantes):
+
+\small
+\begin{itemize}
+  \item \textbf{Población:} Crecimiento logístico hacia saturación $K$ (mencionar estabilización esperada)
+  \item \textbf{Desigualdad:} Relajación exponencial $-\alpha_F F$ domina (reducción gradual si $\beta_F W$ estable)
+  \item \textbf{Bienestar:} Tendencia determinada por balance $\alpha_W P + \gamma_W W - \delta_W F$ (sensible a parámetros)
+\end{itemize}
+
+\textbf{Afirmaciones clave:}
+\begin{enumerate}
+  \item Sistema acoplado mejora coherencia dinámica vs modelo univariado (destacar retroalimentación P↔F↔W)
+  \item Capacidad de carga $K$ controla saturación poblacional urbana (interpretación física clara)
+  \item Desigualdad y bienestar aún volátiles: posible inclusión de términos cuadráticos o retardos temporales (trabajo futuro)
+  \item Proyecciones dependen críticamente de supuestos sobre U, E (necesidad de escenarios alternativos)
+\end{enumerate}
+
+\textbf{Próximos pasos:} Bootstrap para incertidumbre, análisis de bifurcaciones sobre $K$ y $\gamma_F$, dinámica endógena de U y E
+\end{frame}

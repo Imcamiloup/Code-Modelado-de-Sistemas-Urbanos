@@ -1,0 +1,23 @@
+
+% Diapositiva 4: Función de Pérdida y Optimización
+\begin{frame}{Función de Pérdida y Estrategia de Optimización}
+\textbf{Pérdida ponderada} (justificar pesos por varianza):
+\[
+\mathcal{L}(\theta) = w_P\,\mathrm{MSE}(P) + 2\,w_F\,\mathrm{MSE}(F) + w_W\,\mathrm{MSE}(W), \quad w_X = \frac{1}{\mathrm{Var}(X_z)}
+\]
+Factor 2 en F: mayor volatilidad (resaltar dificultad de capturar desigualdad)\\[8pt]
+
+\textbf{Optimización híbrida:}
+\begin{enumerate}
+  \item \textbf{Global:} Differential Evolution (mencionar exploración robusta, evita mínimos locales)
+    \begin{itemize}
+      \item Población: 25, Iteraciones: 150, Semilla: 42 (reproducibilidad)
+    \end{itemize}
+  \item \textbf{Local:} L-BFGS-B desde mejor global (convergencia fina con gradientes)
+\end{enumerate}
+
+\textbf{Cotas físicas} (enfatizar restricciones de signo y magnitud):
+\[
+r\in[-0.5,0.5],\ \gamma_W\in[-1,0],\ K\in[0.3,5],\ \ldots
+\]
+\end{frame}

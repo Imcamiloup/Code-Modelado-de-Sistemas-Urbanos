@@ -1,0 +1,57 @@
+
+\section{Diagramas de fase con parámetros optimizados}
+Los diagramas se generaron usando los parámetros re-estimados mediante optimización directa sobre trayectorias del modelo continuo.
+
+\subsection{Plano P--W (con $F=0$, $U+E=0$)}
+\begin{figure}[H]\centering
+\includegraphics[width=0.75\textwidth]{Output_Correcciones/Diagramas_Fase_Optimizado/fase_PW_opt.png}
+\caption{Plano de fase P--W.}
+\end{figure}
+Punto fijo: $(P^*,W^*) = \left(0.0000,\,-0.0000\right)$.
+\\
+Jacobiano:
+\[
+J_{PW} =
+\begin{pmatrix}
+0.3515 & 0.0000\\
+-0.0065 & -0.9890
+\end{pmatrix},
+\quad \lambda = \{-0.9890,\ 0.3515\}.
+\]
+Clasificación: \textbf{Punto silla}.
+
+\subsection{Plano P--F (con $W=0$)}
+\begin{figure}[H]\centering
+\includegraphics[width=0.75\textwidth]{Output_Correcciones/Diagramas_Fase_Optimizado/fase_PF_opt.png}
+\caption{Plano de fase P--F.}
+\end{figure}
+Punto fijo: $(P^*,F^*) = \left(0.0000,\,0.0000\right)$.
+\\
+Jacobiano:
+\[
+J_{PF} =
+\begin{pmatrix}
+0.3515 & -0.9752\\
+0.0000 & -0.2342
+\end{pmatrix},
+\quad \lambda = \{0.3515,\ -0.2342\}.
+\]
+Clasificación: \textbf{Punto silla}.
+
+\subsection{Plano F--W (con $P=0$, $U+E=0$)}
+\begin{figure}[H]\centering
+\includegraphics[width=0.75\textwidth]{Output_Correcciones/Diagramas_Fase_Optimizado/fase_FW_opt.png}
+\caption{Plano de fase F--W.}
+\end{figure}
+Punto fijo: $(F^*,W^*) = \left(-0.0000,\,0.0000\right)$.
+\\
+Jacobiano:
+\[
+J_{FW} =
+\begin{pmatrix}
+-0.2342 & 0.0100\\
+-0.9637 & -0.9890
+\end{pmatrix},
+\quad \lambda = \{-0.2472,\ -0.9760\}.
+\]
+Traza$(J)= -1.2232$, Determinante$(J)= 0.241280$. Clasificación: \textbf{Nodo estable}.
